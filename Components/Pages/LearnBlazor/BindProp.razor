@@ -1,15 +1,45 @@
 ﻿@page "/learnBlazor/bindprop"
 
 
-<h3>Product - one way data binding</h3>
+<h3>Product - Data binding </h3>
 
+Name: @Product.Name <br />
+IsActive: @Product.IsActive <br />
+Price: @Product.Price <br />
+This product is: @(Product.IsActive?"Active":"InActive") <br />
 
+IsActive :
+<input type="checkbox" @bind="@Product.IsActive" /><br />
+Input Price: <input type="number" @bind="@Product.Price" @bind:event="oninput" /> <br />
+
+<br />
+Product Properties
+<select @bind="@selectedProp">
+	@foreach(var prop in Product.ProductProperties)
+	{
+		<option value="@prop.Key">@prop.Key</option>
+	}
+</select>
+Selected prop: @selectedProp <br />
+@if (!string.IsNullOrEmpty(selectedProp))
+{
+	<p>Selected Value: @Product.ProductProperties.FirstOrDefault(u => u.Key == selectedProp).Value</p>
+}
 
 @code {
+	private string selectedProp = "";
 	Models.Product Product = new()
 	{
 		Id = 1,
 		Name="Product 1",
-		IsActive=true
+		Price=5,
+		IsActive=false,
+		ProductProperties = new List<Models.ProductProp>()
+		{
+			new Models.ProductProp{Id=1,Key="Color",Value="Red"},
+			new Models.ProductProp{Id=2,Key="Size",Value="20oz"},
+			new Models.ProductProp{Id=3,Key="Flavor",Value="Rose"}
+		}
 	};
+
 }
