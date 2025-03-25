@@ -19,7 +19,8 @@
                     }
                 }
                 <br />
-                <input type="button" class="btn btn-danger" value="Delete"/>
+
+                <input @onclick="() => DeleteProd(prod.Id)" type="button" class="btn btn-danger" value="Delete"/>
             </div>
         }
     </div>
@@ -56,5 +57,14 @@
                     new Product_Prop {Id = 3,Key = "Color",Value = "White"}
                 }
             });
+    }
+
+    private void DeleteProd(int id)
+    {
+        var prod = ProductList.FirstOrDefault(p => p.Id == id);
+        if(prod != null)
+        {
+            ProductList.Remove(prod);
+        }
     }
 }
