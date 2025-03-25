@@ -1,32 +1,18 @@
 ﻿@page "/learnBlazor/demoproduct"
 
 <h2 class="text-primary">DemoProducts</h2>
+<p> Favorite count @FavoriteCount</p>
 <div class=" p-2 mt-2">
     <div class="row">
         @foreach(var prod in ProductList)
         {
-            <div class="bg-light border col-6">
-                <h4 class="text-secondary">Product - @prod.Id</h4>
-                <p>Name - @(prod.Name)</p>
-                Show Properties: 
-                <input type="checkbox" @bind="prod.IsActive"/>
-
-                @if(prod.IsActive)
-                {
-                    @foreach(var prop in prod.ProductProperties)
-                    {
-                        <p>@prop.Key : @prop.Value</p>
-                    }
-                }
-                <br />
-
-                <input @onclick="() => DeleteProd(prod.Id)" type="button" class="btn btn-danger" value="Delete"/>
-            </div>
+            <_IndividualProduct Product="prod" OnFavoriteUpdated="FavoriteCountChange"></_IndividualProduct>
         }
     </div>
 </div>
 
 @code {
+    public int FavoriteCount { get; set; } = 0;
     List<Product> ProductList = new();
     protected override void OnInitialized()
     {
@@ -58,6 +44,17 @@
                 }
             });
     }
+    protected void FavoriteCountChange(bool isSelected)
+    {
+        if (isSelected)
+        {
+            FavoriteCount++;
+        }
+        else
+        {
+            FavoriteCount--;
+        }
+    }
 
     private void DeleteProd(int id)
     {
@@ -67,4 +64,5 @@
             ProductList.Remove(prod);
         }
     }
+    
 }
