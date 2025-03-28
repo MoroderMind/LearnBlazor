@@ -1,0 +1,40 @@
+﻿@page "/blazorjs"
+@inject IJSRuntime _JSRuntime
+<h3>BlazorJS</h3>
+
+<div class="row">
+    <button class="btn btn-secondary" @onclick="TestConfirmBox">Test Confirm Button</button>
+</div>
+<div class="row">
+    @if(ConfirmResult)
+    {
+        <p>Confirmation was made</p>
+    }
+    else
+    {
+        <p>Pending Confirmation</p>
+    }
+</div>
+
+<div class="row">
+    <button class="btn btn-success" @onclick="ToastrSucces">ToastR succes</button>
+    <button class="btn btn-danger" @onclick="ToastrError">ToastR Fail</button>
+</div>
+@code {
+    private string ConfirmMessage = "Are you Sure you want to click here?";
+    private bool ConfirmResult { get; set; }
+
+    private async Task TestConfirmBox()
+    {
+        ConfirmResult = await _JSRuntime.InvokeAsync<bool>("confirm", ConfirmMessage);
+	}
+
+	private async Task ToastrSucces()
+	{
+		await _JSRuntime.InvokeVoidAsync("showToastr", "success", "Succecs Notification!");
+	}
+    private async Task ToastrError()
+    {
+        await _JSRuntime.InvokeVoidAsync("showToastr", "error", "Error Notification!");
+    }
+}
