@@ -17,9 +17,15 @@
 </div>
 
 <div class="row">
-    <button class="btn btn-success" @onclick="ToastrSucces">ToastR succes</button>
-    <button class="btn btn-danger" @onclick="ToastrError">ToastR Fail</button>
+    <button class="btn btn-success m-2" style="width:200px" @onclick="ToastrSuccess">ToastR succes</button>
+    <button class="btn btn-danger m-2" style="width:200px" @onclick="ToastrError">ToastR Fail</button>
 </div>
+
+<div class="row">
+    <button class="btn btn-success m-2" style="width:200px" @onclick="SweetSuccess">SweetAlert Succes</button>
+    <button class="btn btn-danger m-2" style="width:200px" @onclick="SweetError">SweetAlert Error</button>
+</div>
+
 @code {
     private string ConfirmMessage = "Are you Sure you want to click here?";
     private bool ConfirmResult { get; set; }
@@ -27,14 +33,36 @@
     private async Task TestConfirmBox()
     {
         ConfirmResult = await _JSRuntime.InvokeAsync<bool>("confirm", ConfirmMessage);
-	}
+    }
 
-	private async Task ToastrSucces()
-	{
-		await _JSRuntime.InvokeVoidAsync("showToastr", "success", "Succecs Notification!");
-	}
+    private async Task ToastrSuccess()
+    {
+        // await _JSRuntime.InvokeVoidAsync("showToastr", "success", "Success Notification!");
+        await _JSRuntime.ToastrSuccess("Succes Notification");
+    }
     private async Task ToastrError()
     {
-        await _JSRuntime.InvokeVoidAsync("showToastr", "error", "Error Notification!");
+        // await _JSRuntime.InvokeVoidAsync("showToastr", "error", "Error Notification!");
+        await _JSRuntime.ToastrError("Error Notification!");
+    }
+
+    private async Task SweetSuccess()
+    {
+        await _JSRuntime.InvokeVoidAsync("Swal.fire", new
+        {
+            title = "Good job!",
+            text = "You clicked the button!",
+            icon = "success"
+        }); 
+    }
+
+    private async Task SweetError()
+    {
+        await _JSRuntime.InvokeVoidAsync("Swal.fire", new
+        {
+            icon = "error",
+            title = "Oops...",
+            text = "Something went wrong..."
+        });
     }
 }
